@@ -1,70 +1,148 @@
-import { Image, StyleSheet, Platform } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function HomeScreen() {
+import React from 'react';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // For search and add icons
+import { useNavigation } from 'expo-router';
+
+
+const HomeScreen=() =>{
+  const navigation = useNavigation();
+  const groups = [
+    { id: '1', name: 'Trip to Japan', description: 'Expenses for the Japan trip' },
+    { id: '2', name: 'Family Dinner', description: 'Split family dinner expenses' },
+    { id: '3', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '4', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '5', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '6', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '7', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '8', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '9', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '10', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '11', name: 'Project Expenses', description: 'Shared project resources' },
+    { id: '12', name: 'Projeckmknn', description: 'Shared project resources' },
+    // Add more groups as needed
+  ];
+
+  const renderGroupItem = ({ item }) => (
+    <ThemedView style={styles.groupContainer}>
+      <ThemedText style={{fontSize:16,fontWeight:"500",color:"white"}} >{item.name}</ThemedText>
+      <ThemedText style={{color:"#abb6c3",fontSize:13}}>{item.description}</ThemedText>
+    </ThemedView>
+  );
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View style={styles.mainSection}>
+      <View style={styles.headerContainer}>
+            {/* Left Side: SplitBro text */}
+            <ThemedText style={styles.headerTitle} type="title">Split Bro</ThemedText>
+
+            {/* Right Side: Icons */}
+            <View style={styles.headerIcons}>
+              <Ionicons name="search" size={18} color="white" style={styles.icon} />
+              <Ionicons name="person-add-outline" size={18} color="white" style={styles.icon} />
+            </View>
+          </View>
+        {/* Section: Groups List */}
+        <FlatList
+          data={groups}
+          keyExtractor={(item) => item.id}
+          renderItem={renderGroupItem}
+          contentContainerStyle={styles.groupList}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+
+        {/* Bottom padding to make space for the sticky button */}
+        {/* <View style={{ height:10}} /> */}
+
+      {/* Sticky Button: Add Expense */}
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('screens/add-expense')}>
+        <Ionicons style={styles.addButtonIcon}  name="add" size={20} color="white" />
+        <ThemedText style={styles.addButtonText}  >Add Expense</ThemedText>
+      </TouchableOpacity>
+    </View>
+    
   );
 }
 
+
 const styles = StyleSheet.create({
-  titleContainer: {
+  mainSection:{
+    // backgroundColor: '#111112',
+    flex:1,
+    fontFamily:"monospace"
+  },
+  headerContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    // backgroundColor: '#111112',
+    height: 50,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  headerTitle: {
+    fontSize: 22,
+    color: 'white',
+    fontFamily:"Roboto",
+    fontWeight:"bold"
+
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  headerIcons: {
+    flexDirection: 'row',
+    color:"#acb6c3",
+    fontSize:15
+  },
+  icon: {
+    marginLeft: 15,
+  },
+  groupList: {
+    paddingHorizontal: 0,
+    // margin: 10,
+    // borderRadius: 8,
+  },
+  groupContainer: {
+    backgroundColor: '#19191a',
+    color:"white",
+    padding: 10,
+    paddingTop:15,
+    // borderBottomWidth:0.5,
+    // borderBottomColor:"#48484b",
+    paddingHorizontal:20,
+    marginVertical: 0,
+    // borderRadius: 10,
+    fontFamily:"Roboto"
+
+  },
+  addButton: {
     position: 'absolute',
+    bottom: 30,
+    right: 30,
+    backgroundColor: '#7c59e2',
+    borderRadius: 50,
+    padding: 10,
+    paddingEnd:18,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    elevation: 5,
+    flexDirection:"row"
   },
+  addButtonIcon:{
+    paddingRight:3
+  },
+  addButtonText:{
+    fontWeight:"500",
+    fontSize:15
+  }
 });
+
+
+
+export default HomeScreen;
